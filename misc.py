@@ -5,6 +5,10 @@ import os
 import numpy as np
 import pandas as pd
 
+# CHUNK_SIZE = 500000
+# DATASET_PATH = "dataset/"
+# CLEAN_DATASET = "cic_ids2018_cleaned.csv"
+
 
 def build_dataset():
     files = glob.glob(os.path.join("dataset/", "*.csv"))
@@ -45,11 +49,11 @@ def clean_dataset(name: str):
     # print(df["Label"].value_counts())
     print("==============================")
     print("===============CHANGING LABELS ===============")
-    # df["Label"] = df["Label"].apply(lambda x: 0 if x == "Benign" else 1)
+    df["Label"] = df["Label"].apply(lambda x: 0 if x == "Benign" else 1)
 
-    # mask = ~(df.astype(str) == df.columns).all(axis=1)
+    mask = ~(df.astype(str) == df.columns).all(axis=1)
 
-    # df = df[mask]
+    df = df[mask]
     print("=============== SAVING ===============")
     df.to_csv(name, index=False)
     print_info(df)
@@ -109,7 +113,6 @@ if __name__ == "__main__":
         df = clean_dataset("cic_ids2018_cleaned.csv")
         process_df()
     else:
-        clean_dataset("cic_ids2018_cleaned.csv")
-        # df = pd.read_csv("cic_ids2018_cleaned.csv", on_bad_lines="skip")
+        df = pd.read_csv("cic_ids2018_cleaned.csv", on_bad_lines="skip")
 
-        # print_info(df)
+        print_info(df)
